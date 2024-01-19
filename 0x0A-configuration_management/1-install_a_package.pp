@@ -1,4 +1,4 @@
 package {'python3-flask':
-	ensure => present,
+	ensure => installed,
 }
 
