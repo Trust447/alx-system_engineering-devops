@@ -3,6 +3,7 @@
 package {'python3':
 	ensure   => present,
 }
+
 package {'pip3':
 	ensure   => present,
 }
