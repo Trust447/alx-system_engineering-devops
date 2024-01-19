@@ -1,4 +1,4 @@
 package {'python3':
-	ensure => present
+	ensure => present,
 }
 
