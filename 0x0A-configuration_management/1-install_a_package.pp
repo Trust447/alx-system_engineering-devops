@@ -1,3 +1,4 @@
-package {'python3-flask':
-	ensured => 'installed',
+package {'python3':
+	ensure => present
 }
+
