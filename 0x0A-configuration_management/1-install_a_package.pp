@@ -1,8 +1,9 @@
+# pp script to install flask
 package {'python3':
-	ensure => 'present',
+	ensure => present,
 }
 package {'pip3':
-	ensure => 'present',
+	ensure => present,
 
 }
 
