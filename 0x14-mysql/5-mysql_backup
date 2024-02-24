@@ -9,3 +9,11 @@ tar -czf "$(date +%d-%m-%Y).tar.gz" backup.sql
 
 # Remove the temporary backup.sql file
 rm backup.sql
+
+# Check if the archive was successfully created
+if [ -f "$(date +%d-%m-%Y).tar.gz" ]; then
+	echo "Archive created successfully"
+
+else
+	echo "Failed to create archive"
+fi
