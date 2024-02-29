@@ -1,27 +1,26 @@
 #!/usr/bin/python3
 """
-module to convert response to json file
+module to fetch tasks and save as csv
 """
-import json
+import csv
 import requests
 import sys
 
-if __name__ == '__main__':
-    emp_id = int(sys.argv[1])
-    url = f'https://jsonplaceholder.typicode.com/users/{emp_id}/todos'
-    usr_url = f'https://jsonplaceholder.typicode.com/users/{emp_id}'
 
-    data = requests.get(url).json()
-    usr_data = requests.get(usr_url).json().get('username')
+if __name__ == "__main__":
+    USER_ID = sys.argv[1]
+    tasks_url = f'https://jsonplaceholder.typicode.com/users/{USER_ID}/todos'
+    user_url = f'https://jsonplaceholder.typicode.com/users/{USER_ID}'
+    tasks = requests.get(tasks_url).json()
+    USERNAME = requests.get(user_url).json().get("username")
+    output = []
+    tasks_len = len(tasks)
+    for idx in range(tasks_len):
+        task = tasks[idx]
+        STATUS = task.get('completed')
+        TITLE = task.get('title')
+        output.append(f"{USER_ID},{USERNAME},{STATUS},{TITLE}".split(','))
 
-    data_list = []
-    for info in data:
-        new_dict = {}
-        new_dict['task'] = info.get('title')
-        new_dict['completed'] = info.get('completed')
-        new_dict['username'] = usr_data
-        data_list.append(new_dict)
-    my_dict = {emp_id: data_list}
-
-    with open(f'{emp_id}.json', 'w') as my_file:
-        json.dump(my_dict, my_file)
+    with open(f"{USER_ID}.csv", "w")as csvFile:
+        write = csv.writer(csvFile, quoting=csv.QUOTE_ALL)
+        write.writerows(output)
