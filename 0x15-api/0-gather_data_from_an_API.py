@@ -16,7 +16,6 @@ if __name__ == "__main__":
         EMPLOYEE_NAME = json.loads(
                 user.read().decode("utf-8")
                 ).get("name")
-
         with urllib.request.urlopen(url) as raw_tasks:
             tasks = json.loads(
                     raw_tasks.read().decode("utf-8")
