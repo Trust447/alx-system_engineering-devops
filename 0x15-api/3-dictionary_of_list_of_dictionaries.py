@@ -27,4 +27,4 @@ if __name__ == '__main__':
             my_dict[USR_ID] = task_list
 
             with open('todo_all_employees.json', 'w') as my_file:
-                 json.dump(my_dict, my_file)
+                json.dump(my_dict, my_file)
