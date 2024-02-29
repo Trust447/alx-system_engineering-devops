@@ -1,32 +1,30 @@
 #!/usr/bin/python3
-"""Accessing a REST API for todo lists of employees"""
-
+"""
+module to convert response to json file for all users
+"""
 import json
 import requests
-import sys
-
 
 if __name__ == '__main__':
-    url = "https://jsonplaceholder.typicode.com/users"
+    url = 'https://jsonplaceholder.typicode.com/todos'
+    usr_url = 'https://jsonplaceholder.typicode.com/users'
 
-    response = requests.get(url)
-    users = response.json()
+    tasks = requests.get(url).json()
+    users = requests.get(usr_url).json()
 
-    dictionary = {}
+    my_dict = {}
     for user in users:
-        user_id = user.get('id')
-        username = user.get('username')
-        url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
-        url = url + '/todos/'
-        response = requests.get(url)
-        tasks = response.json()
-        dictionary[user_id] = []
+        task_list = []
+        USR_ID = user.get('id')
+        USR_NM = user.get('username')
         for task in tasks:
-            dictionary[user_id].append({
-                "task": task.get('title'),
-                "completed": task.get('completed'),
-                "username": username
-                })
+            if USR_ID == task.get('userId'):
+                new_dict = {}
+                new_dict["username"] = USR_NM
+                new_dict['task'] = task.get('title')
+                new_dict['completed'] = task.get('completed')
+                task_list.append(new_dict)
+            my_dict[USR_ID] = task_list
 
-    with open('todo_all_employees.json', 'w') as file:
-        json.dump(dictionary, file)
+            with open('todo_all_employees.json', 'w') as my_file:
+                 json.dump(my_dict, my_file)
