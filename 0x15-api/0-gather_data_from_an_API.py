@@ -1,31 +1,32 @@
 #!/usr/bin/python3
-"""Accessing a REST API for todo lists of employees"""
-
-import requests
+"""
+module to fetch completed tasks
+"""
+import json
 import sys
+import urllib.request
 
 
-if __name__ == '__main__':
-    employeeId = sys.argv[1]
-    baseUrl = "https://jsonplaceholder.typicode.com/users"
-    url = baseUrl + "/" + employeeId
+if __name__ == "__main__":
+    emp_id = sys.argv[1]
+    url = f'https://jsonplaceholder.typicode.com/users/{emp_id}/todos'
+    url_user = f'https://jsonplaceholder.typicode.com/users/{emp_id}'
 
-    response = requests.get(url)
-    employeeName = response.json().get('username')
+    with urllib.request.urlopen(url_user) as user:
+        EMPLOYEE_NAME = json.loads(
+                user.read().decode("utf-8")
+                ).get("name")
+        with urllib.request.urlopen(url) as raw_tasks:
+            tasks = json.loads(
+                    raw_tasks.read().decode("utf-8")
+                    )
+            TOTAL_NUMBER_OF_TASKS = len(tasks)
+            done = [x for x in tasks if x.get('completed') is True]
+            NUMBER_OF_DONE_TASKS = len(done)
 
-    todoUrl = url + "/todos"
-    response = requests.get(todoUrl)
-    tasks = response.json()
-    done = 0
-    done_tasks = []
+            print(f"Employee {EMPLOYEE_NAME} ", end='')
+            print(f"is done with tasks({NUMBER_OF_DONE_TASKS}/", end='')
+            print(f"{TOTAL_NUMBER_OF_TASKS}):")
 
-    for task in tasks:
-        if task.get('completed'):
-            done_tasks.append(task)
-            done += 1
-
-    print("Employee {} is done with tasks({}/{}):"
-            .format(employeeName, done, len(tasks)))
-
-    for task in done_tasks:
-        print("\t {}".format(task.get('title')))
+            for x in done:
+                print(f"\t {x.get('title')}")
